@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="广东考试服务网，母亲节，自考，自考报考，自考报名，高考成绩，5184">
+	<title>5184母亲节送祝福</title>
+	<link rel="stylesheet" type="text/css" href="css/normalize.css">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+	<script type="text/javascript" src="js/jquery-1.8.0.min.js"></script>
+</head>
+<body>
+	<div id="bg">
+		<div id="mock">
+		<div id="lang">写下对母亲的感激之言</div>
+		<input type="text" name="word" id="word" maxlength="12" autofocus="autofocus" required="required" placeholder="妈妈我爱你(2-12字)" size="20">
+		<button id="submit" disabled="disabled">提交</button>
+		<p>提交后，长按及保存图片，就可以生成你的专属祝福海报啦！</p>
+		</div>
+	</div>
+	<canvas id="draw" width="440" height="693" class="hide"></canvas>
+	<script type="text/javascript">
+
+	function motherDraw(word){
+		var can = document.getElementById('draw');
+		var ctx = can.getContext('2d');
+		var img = new Image();
+		var img2 = new Image();
+		img2.src = "images/QRcode.jpg";
+		img2.style.opacity = 0.5;
+		img.src = "images/02.jpg";
+
+		img.onload = function(){
+
+		ctx.drawImage(img,0,0);
+		ctx.drawImage(img2,300,475);
+		// Text style
+		ctx.font = "22px Times New Roman";
+		// ctx.textAlign = "center";
+		ctx.strokeStyle = "gray";
+		ctx.lineWidth = 1;
+		ctx.fillStyle = "black";
+		ctx.shadowColor = 'rgba(255, 255, 255, 0.6)';
+		ctx.shadowOffsetX = 2;
+		ctx.shadowOffsetY = 1;
+			if(word !== null){
+
+				if(word.length > 6){
+					var arr = word.split('');
+					var arr2 = [];
+
+					for(i = 6; i < arr.length; i++){
+						arr2.push(arr[i]);
+					}
+					word = arr.slice(0,6).join('');
+					var word2 = arr2.join('');
+					ctx.fillText(word,20,150);
+					ctx.fillText(word2,20,190);
+				}
+
+				if(word.length >= 2){
+    				$("#submit").removeAttr("disabled");
+    				$("#submit").css('backgroundColor',"#f00");
+    			}
+
+    			if(word.length < 2){
+    				$("#submit").attr("disabled","disabled");
+    				$("#submit").css('backgroundColor',"#ccc");
+    			}
+
+				else{
+					ctx.fillText(word,20,150);
+				}
+			}
+
+
+		}
+	}
+
+	function textChangeListener (evt) {
+      var id = evt.target.id;
+      var text = evt.target.value;
+      var word = text;
+      // motherDraw();
+      motherDraw(word);
+    }
+
+    // Add Class method
+    function hassClass(obj, cls) {
+    	return obj.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
+	}
+
+	function adddClass(obj, cls) {
+    	if (!this.hassClass(obj, cls)) obj.className += " " + cls;
+	}
+
+
+
+	function openfile(){
+		var canvas = document.getElementById('draw');
+		var img = convertCanvasToImage(canvas);
+		$('body').append(img);
+
+		$("#bg").addClass("hide");
+	}
+
+	function convertCanvasToImage(canvas) {
+		var image = new Image();
+		image.src = canvas.toDataURL();
+		adddClass(image,"fullWidth");
+		return image;
+	}
+
+	function saveAsLocalImage () {
+		var myCanvas = document.getElementById("draw");
+		// here is the most important part because if you dont replace you will get a DOM 18 exception.
+		// var image = myCanvas.toDataURL("image/png").replace("image/png", "image/octet-stream;Content-Disposition: attachment;filename=foobar.png");
+		var image = myCanvas.toDataURL("image/png").replace("image/png", "image/octet-stream");
+		window.location.href=image; // it will save locally
+	}
+
+	var input =  document.getElementById('word');
+	input.oninput = textChangeListener;
+	// console.log(input.value);
+	document.getElementById('submit').addEventListener('click', openfile, false);
+	document.getElementById('submit').addEventListener('tab', openfile, false);
+
+	</script>
+</body>
+</html>
